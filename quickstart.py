@@ -1,9 +1,10 @@
 from __future__ import print_function
 from googleapiclient.discovery import build
 from httplib2 import Http
-from oauth2client import file,client,tools
+from oauth2client import client,tools,file
 
-SCOPES = 'https://www.googleapis.com/auth/gmail.readonly'
+# SCOPES = 'https://www.googleapis.com/auth/gmail.readonly'
+SCOPES = 'https://mail.google.com/'
 
 def main():
     store = file.Storage('credentials.json')
@@ -28,6 +29,7 @@ def main():
         print('labels')
         for label in labels:
             print(label['name'])
-
-if __name__ == '__main__':
-    main()
+    
+    return service
+# if __name__ == '__main__':
+#     main()
