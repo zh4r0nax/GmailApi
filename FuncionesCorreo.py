@@ -12,6 +12,7 @@ class Correo():
     def __init__(self, service):
         self.service = service
         self.Draft = None
+        self.user_id = 'me'
 
     def Create_Message(self, sender, to, subject, message_text):
         message = MIMEText(message_text)
@@ -23,15 +24,41 @@ class Correo():
         body = {'raw': raw}
         return body
 
-    def Create_Draft(self, user_id, message_body):
+    def Create_Draft(self, message_body):
         try:
             message = {'message': message_body}
             # message = json.dumps(message)
-            self.Draft = self.service.users().drafts().create(userId=user_id, body=message).execute()
+            self.Draft = self.service.users().drafts().create(userId=self.user_id, body=message).execute()
 
-            print('Draft id: '+self.Draft['id']+'\nDraft message: '+self.Draft['message'])
+            print('Draft id: '+str(self.Draft['id'])+'\nDraft message: '+str(self.Draft['message']))
 
             return self.Draft
+        except Exception as e:
+            print('An error occurred: '+str(e))
+            return None
+
+    def Get_Draft_ID(self,ID):
+        try:
+            self.Draft = self.service.users().drafts().get(userId=self.user_id,id=ID).execute()
+            return self.Draft
+        except Exception as e:
+            print('An error occurred: '+str(e))
+            return None
+
+    def Send_Draft_ID(self,ID):
+        try:
+            self.Draft = self.service.users().drafts().send(userId=self.user_id,id=ID).execute()
+            return self.Draft
+        except Exception as e:
+            print('An error occurred: '+str(e))
+            return None
+
+    def send_message(self, message):
+        try:
+            message = (self.service.users().messages().send(userId=self.user_id, body=message)
+                    .execute())
+            print('Message Id: '+str(message['id']))
+            return message
         except Exception as e:
             print('An error occurred: '+str(e))
             return None
