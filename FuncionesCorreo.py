@@ -45,9 +45,9 @@ class Correo():
             print('An error occurred: '+str(e))
             return None
 
-    def Send_Draft_ID(self,ID):
+    def Send_Draft_ID(self,Draft):
         try:
-            self.Draft = self.service.users().drafts().send(userId=self.user_id,id=ID).execute()
+            self.Draft = self.service.users().drafts().send(userId=self.user_id,Draft=Draft).execute()
             return self.Draft
         except Exception as e:
             print('An error occurred: '+str(e))
